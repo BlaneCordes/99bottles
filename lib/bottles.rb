@@ -3,28 +3,15 @@ class Bottles
     verse_response(number_of_bottles)
   end
 
-  def verses(first_bottles, second_bottles)
-    if first_bottles == 2 && second_bottles == 0
-      <<~VERSES
-2 bottles of beer on the wall, 2 bottles of beer.
-Take one down and pass it around, 1 bottle of beer on the wall.
-
-1 bottle of beer on the wall, 1 bottle of beer.
-Take it down and pass it around, no more bottles of beer on the wall.
-
-No more bottles of beer on the wall, no more bottles of beer.
-Go to the store and buy some more, 99 bottles of beer on the wall.
-VERSES
-    else
-      "#{verse_response(first_bottles)}" +
-      "\n" +
-      "#{verse_response(second_bottles)}"
-    end
+  def verses(start_of_range, end_of_range)
+    [*end_of_range..start_of_range].reverse.map do |number_of_bottles|
+      verse(number_of_bottles)
+    end.join("\n")
   end
 
   def song
     [*0..99].reverse.map do |bottles|
-      verse_response(bottles)
+      verse(bottles)
     end.join("\n")
   end
 
@@ -42,15 +29,15 @@ VERSES
     end
   end
 
-  def bottles_pluralization(bottles)
-    bottles == 1 ? "bottle" : "bottles"
+  def closing_line(bottles)
+    return "Take it down and pass it around, no more bottles of beer on the wall." if bottles.zero?
+
+    "Take one down and pass it around, #{bottles} #{bottles_pluralization(bottles)} of beer on the wall."
   end
 
-  def closing_line(bottles)
-    if bottles.positive?
-      "Take one down and pass it around, #{bottles} #{bottles_pluralization(bottles)} of beer on the wall."
-    else
-      "Take it down and pass it around, no more bottles of beer on the wall."
-    end
+  private
+
+  def bottles_pluralization(number_of_bottles)
+    number_of_bottles == 1 ? "bottle" : "bottles"
   end
 end
